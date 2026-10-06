@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>34401A — Manual interactivo del panel frontal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14171a;
+    --grid-line: rgba(126,167,120,0.10);
+    --grid-line-strong: rgba(126,167,120,0.22);
+    --cream:#e2e0d5;
+    --cream-shadow:#c5c1b2;
+    --cream-deep:#b7b3a4;
+    --screen:#050705;
+    --vfd:#49d6c8;
+    --vfd-dim: rgba(73,214,200,0.35);
+    --ink:#211f1a;
+    --ink-soft:#4a463c;
+    --red:#c1382a;
+    --red-dark:#8f291e;
+    --paper:#f3f0e6;
+    --paper-line: rgba(33,31,26,0.10);
+    --focus:#3f8cc4;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html, body{ overflow-x:hidden; max-width:100%; }
+  *, *::before, *::after{ -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact; }
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(0deg, var(--grid-line) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(90deg, var(--grid-line) 0 1px, transparent 1px 64px),
+      var(--bg);
+    color: var(--paper);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+  }
+  ::selection{ background: var(--vfd-dim); }
+  a{ color: var(--vfd); }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  /* ---------- Hero ---------- */
+  .hero{ max-width: 1180px; margin: 0 auto; padding: 72px 28px 40px; position:relative; }
+  .hero::before{ content:""; position:absolute; left:28px; right:28px; top:0; height:1px; background: var(--grid-line-strong); }
+  .eyebrow-row{ display:flex; align-items:center; gap:14px; font-family:'IBM Plex Mono', monospace; font-size:13px; color: var(--vfd); margin-bottom:22px; }
+  .eyebrow-row .dot{ width:8px;height:8px;border-radius:50%; background: var(--vfd); box-shadow: 0 0 8px var(--vfd); }
+  .hero h1{ font-family:'IBM Plex Mono', monospace; font-weight:700; font-size: clamp(38px, 6.4vw, 78px); letter-spacing: -0.01em; margin: 0 0 6px; color: var(--paper); }
+  .hero h1 sup{ font-size: 0.28em; font-weight:500; color: var(--vfd); vertical-align: super; margin-left: 10px; }
+  .hero p.lead{ max-width: 620px; font-size: 18px; color: #cfd0c9; margin: 0 0 34px; }
+  .spec-strip{ display:flex; flex-wrap:wrap; border-top: 1px solid var(--grid-line-strong); border-bottom: 1px solid var(--grid-line-strong); }
+  .spec-strip div{ padding: 16px 26px 16px 0; margin-right: 26px; border-right: 1px solid var(--grid-line-strong); font-family:'IBM Plex Mono', monospace; }
+  .spec-strip div:last-child{ border-right:none; }
+  .spec-strip .num{ font-size: 22px; font-weight:600; color: var(--paper); }
+  .spec-strip .label{ font-size: 11.5px; color:#9a9c92; letter-spacing:.03em; margin-top:2px; }
+
+  /* ---------- Generic section shell ---------- */
+  section{ max-width: 1180px; margin: 72px auto 0; padding: 0 28px; }
+  .section-head{ display:flex; align-items:baseline; justify-content:space-between; gap: 20px; border-bottom: 1px solid var(--grid-line-strong); padding-bottom: 14px; margin-bottom: 28px; }
+  .section-head h2{ font-family:'IBM Plex Mono', monospace; font-size: 26px; margin:0; font-weight:600; }
+  .section-head span{ font-size:13px; color:#9a9c92; font-family:'IBM Plex Mono', monospace;}
+  .section-note{ font-size:14.5px; color:#a9ab9f; max-width:640px; margin:-16px 0 28px; }
+
+  /* ---------- Quickstart ---------- */
+  .quickstart-card{ background: var(--paper); color: var(--ink); border-radius: 12px; padding: 30px; }
+  .qs-steps{ list-style:none; margin:0; padding:0; counter-reset: qs; }
+  .qs-steps li{ counter-increment: qs; display:flex; gap:16px; padding: 16px 0; border-top: 1px solid var(--paper-line); }
+  .qs-steps li:first-child{ border-top:none; padding-top:4px; }
+  .qs-steps li::before{ content: counter(qs); font-family:'IBM Plex Mono', monospace; font-weight:700; font-size:14px; color: var(--focus); width:26px; height:26px; border-radius:50%; border:1.5px solid var(--focus); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .qs-steps p{ margin:0; font-size:14.5px; color:#3a362c; }
+  .qs-steps strong{ color: var(--ink); }
+
+  /* ---------- Panel section ---------- */
+  .panel-section{ display:block; }
+  .panel-toolbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom: 14px; flex-wrap:wrap; }
+  .instruction{ font-family:'IBM Plex Mono', monospace; font-size: 13px; color:#9a9c92; margin:0; }
+  .instruction strong{ color: var(--vfd); font-weight:600; }
+  .zoom-launcher{ font-family:'IBM Plex Mono', monospace; font-size: 12px; font-weight:600; color: var(--bg); background: var(--vfd); border:none; border-radius: 999px; padding: 8px 14px; display:inline-flex; align-items:center; gap:6px; cursor:pointer; white-space:nowrap; transition: transform .08s ease; }
+  .zoom-launcher:hover{ filter:brightness(1.08); }
+  .zoom-launcher:active{ transform: scale(.95); }
+  .zoom-launcher:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .panel-wrap{ position:relative; }
+
+  /* ---------- Chassis ---------- */
+  .chassis{ background: linear-gradient(180deg, #cfcfc8, #a9a89e); border-radius: 14px; padding: 10px; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6); }
+  .panel{ display:grid; grid-template-columns: 2.3fr 1fr; gap: 8px; background: var(--cream-deep); border-radius: 8px; padding: 8px; }
+  @media (max-width: 640px){ .panel{ grid-template-columns: 1fr; } }
+  .bezel-left{ background: var(--cream); border-radius: 6px; padding: 16px; }
+  .bezel-right{ background: var(--cream); border-radius: 6px; padding: 16px; }
+
+  .brand{ font-family:'IBM Plex Mono', monospace; color: var(--ink); font-size: 13px; font-weight:600; margin-bottom: 10px; display:flex; flex-direction:column; gap:2px; }
+  .brand .model{ font-size:15px; }
+  .brand .sub{ font-weight:400; font-size:10.5px; color: var(--ink-soft); letter-spacing:.02em; }
+
+  .screen{ width:100%; aspect-ratio: 4.6/1; background: var(--screen); border-radius: 4px; border: 8px solid #17140f; box-shadow: 0 0 0 2px #6b7280, inset 0 0 0 1px rgba(255,255,255,0.06); -webkit-appearance:none; appearance:none; position:relative; overflow:hidden; cursor:pointer; padding: 0 18px; display:flex; align-items:center; }
+  .vfd-off{ position:absolute; inset:0; background: radial-gradient(circle at 30% 20%, #151e19, #050705 75%); opacity:1; transition: opacity .6s ease; }
+  .vfd-reading{ font-family:'IBM Plex Mono', monospace; font-size: clamp(20px, 3.4vw, 34px); font-weight:600; color: var(--vfd); text-shadow: 0 0 10px var(--vfd); letter-spacing: .04em; opacity:0; transition: opacity .6s ease; display:flex; align-items:baseline; gap:10px; }
+  .vfd-reading .unit{ font-size: 0.42em; color: var(--vfd); opacity:.85; }
+  .screen.is-on .vfd-off{ opacity:0; }
+  .screen.is-on .vfd-reading{ opacity:1; }
+
+  .controls-row{ display:flex; gap:14px; margin-top: 16px; align-items:flex-start; }
+  .power-col{ display:flex; flex-direction:column; align-items:center; gap:6px; flex-shrink:0; }
+  .power-btn{ width: 44px; height:44px; border-radius: 8px; background: linear-gradient(180deg,#f6f3e9,#c7c0a9); border: 1px solid var(--cream-deep); box-shadow: 0 3px 0 var(--cream-deep); cursor:pointer; transition: transform .08s ease, box-shadow .08s ease; }
+  .power-btn:active{ transform: translateY(2px); box-shadow:none; }
+  .power-label{ font-family:'IBM Plex Mono', monospace; font-size:9.5px; color:var(--ink-soft); text-align:center; line-height:1.5; }
+  .power-label .on{ color: var(--ink); font-weight:600; }
+
+  .buttons-grid{ flex:1; display:flex; flex-direction:column; gap: 8px; }
+  .button-row{ display:grid; grid-template-columns: repeat(7, 1fr); gap: 8px; border:1px solid var(--cream-deep); border-radius: 10px; padding: 10px; }
+  @media (max-width: 700px){ .button-row{ grid-template-columns: 1fr; } .button-row > .hotspot{ grid-column: 1 / -1 !important; } }
+
+  .hotspot{ border: 1px solid transparent; border-radius: 10px; background: transparent; cursor: pointer; text-align:left; font: inherit; color: inherit; padding: 10px; transition: background .15s ease, border-color .15s ease; position:relative; }
+  .hotspot:hover{ background: rgba(33,31,26,0.05); }
+  .hotspot:focus-visible{ outline: 2px solid var(--focus); outline-offset: 2px; }
+  .hotspot.active{ background: rgba(63,140,196,0.10); border-color: var(--focus); }
+  .hotspot.flash{ animation: flashPulse 1s ease; }
+  @keyframes flashPulse{ 0%{ box-shadow:0 0 0 0 rgba(63,140,196,.55);} 100%{ box-shadow:0 0 0 16px rgba(63,140,196,0);} }
+  .hotspot .cap{ font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing:.03em; color: var(--ink-soft); margin-bottom: 8px; display:block; }
+
+  .key-row-flex{ display:flex; gap:6px; }
+  .keybtn{ flex:1; background: linear-gradient(180deg,#f6f3e9,#c7c0a9); border: 1px solid var(--cream-deep); border-radius: 6px; padding: 8px 4px 7px; font-size: 12px; font-weight:600; color: var(--ink); box-shadow: 0 3px 0 var(--cream-deep); cursor:pointer; transition: transform .08s ease, box-shadow .08s ease; text-align:center; }
+  .keybtn:active{ transform: translateY(2px); box-shadow:none; }
+  .keybtn .shift{ display:block; font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:9.5px; color: var(--focus); margin-bottom:4px; }
+  .subcap{ display:block; text-align:center; font-family:'IBM Plex Mono', monospace; font-size:9px; color: var(--ink-soft); letter-spacing:.03em; margin-top:8px; }
+
+  .jacks-header{ display:flex; gap:10px; margin-bottom:6px; }
+  .jacks-header .cap{ flex:1; }
+  .terminals-row{ display:flex; align-items:flex-start; gap:10px; margin-top: 18px; }
+
+  .jacks-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .jack-col{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .jack{ width:26px; height:26px; border-radius:50%; border: 3px solid var(--ink-soft); position:relative; }
+  .jack.hi{ border-color: var(--red-dark); background: radial-gradient(circle at 35% 30%, #e2857a, var(--red) 70%); }
+  .jack.lo{ background: radial-gradient(circle at 35% 30%, #3a3a3a, #111 70%); }
+  .jack-label{ font-family:'IBM Plex Mono', monospace; font-size:9.5px; color: var(--ink-soft); text-align:center; }
+
+  /* ---------- Zoom modal ---------- */
+  .zoom-modal{ position:fixed; inset:0; background: rgba(9,11,10,0.94); z-index:100; display:flex; flex-direction:column; }
+  .zoom-modal[hidden]{ display:none; }
+  .zoom-topbar{ display:flex; justify-content:space-between; align-items:center; padding: 14px 18px; }
+  .zoom-hint{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:#9a9c92; }
+  .zoom-close{ background: var(--paper); border:none; border-radius:999px; padding:9px 16px; font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:13px; cursor:pointer; }
+  .zoom-scroll{ flex:1; overflow:auto; -webkit-overflow-scrolling:touch; padding: 10px 20px 40px; }
+  .zoom-scroll .chassis{ width: min(880px, 94vw); max-width:none; margin:0 auto; }
+
+  /* ---------- Callout ---------- */
+  .callout{ position:fixed; max-width:250px; background: var(--paper); color: var(--ink); border-radius: 10px; padding: 14px 34px 14px 16px; box-shadow: 0 14px 34px rgba(0,0,0,.5); font-size: 13.5px; z-index:150; opacity:0; transform: translateY(4px) scale(.98); pointer-events:none; transition: opacity .15s ease, transform .15s ease; }
+  .callout.show{ opacity:1; transform: translateY(0) scale(1); pointer-events:auto; }
+  .callout .callout-group{ font-family:'IBM Plex Mono', monospace; font-size:10px; color: var(--red-dark); letter-spacing:.03em; margin-bottom:4px; }
+  .callout h4{ margin:0 0 6px; font-family:'IBM Plex Mono', monospace; font-size:13.5px; }
+  .callout p{ margin:0; color:#3a362c; }
+  .callout-close{ position:absolute; top:8px; right:10px; background:none; border:none; font-size:13px; cursor:pointer; color:#8a8672; line-height:1; padding:2px; }
+
+  /* ---------- Reference accordion ---------- */
+  .ref-groups{ columns: 2 340px; column-gap: 40px; }
+  @media (max-width: 640px){ .ref-groups{ columns: 1; } }
+  .ref-group{ break-inside: avoid; margin-bottom: 30px; }
+  .ref-group > h4{ font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--vfd); margin: 0 0 10px; }
+  .ref-item{ border-top: 1px solid var(--grid-line-strong); border-radius: 6px; transition: background .3s ease; }
+  .ref-item.flash-ref{ background: rgba(73,214,200,0.12); }
+  .ref-item:last-child{ border-bottom: 1px solid var(--grid-line-strong); }
+  .ref-toggle{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; background:none; border:none; text-align:left; color: var(--paper); font-family: inherit; font-size:14.5px; font-weight:600; padding: 12px 2px; cursor:pointer; }
+  .ref-toggle:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .ref-toggle .ref-icon{ font-family:'IBM Plex Mono', monospace; color:#9a9c92; flex-shrink:0; }
+  .ref-preview{ margin:0 0 10px; font-size:13px; color:#a9ab9f; }
+  .ref-body{ padding: 0 2px 16px; }
+  .ref-body[hidden]{ display:none; }
+  .ref-body p{ font-size:13.5px; color:#c7c9bd; margin:0 0 10px; }
+  .ref-jump{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color: var(--vfd); background:none; border:1px solid var(--vfd-dim); border-radius:999px; padding:6px 12px; cursor:pointer; }
+
+  /* ---------- Tips & errors ---------- */
+  .tips-grid{ display:grid; grid-template-columns: 1fr; gap: 40px; }
+  @media (min-width: 780px){ .tips-grid{ grid-template-columns: 1fr 1fr; } }
+  .tips-col h3{ font-family:'IBM Plex Mono', monospace; font-size:15px; margin:0 0 18px; }
+  .tips-col.tips h3{ color: var(--vfd); }
+  .tips-col.errors h3{ color: var(--red); }
+  .tip-item{ border-left: 3px solid var(--vfd-dim); padding: 4px 0 4px 16px; margin-bottom: 20px; }
+  .error-item{ border-left: 3px solid rgba(193,56,42,0.5); padding: 4px 0 4px 16px; margin-bottom: 20px; }
+  .tip-item strong, .error-item strong{ display:block; font-size:14.5px; margin-bottom:4px; color: var(--paper); }
+  .tip-item span, .error-item span{ font-size:13.5px; color:#a9ab9f; }
+
+  .glossary{ margin-top: 44px; }
+  .glossary h3{ font-family:'IBM Plex Mono', monospace; font-size:15px; margin:0 0 18px; color:#c7c9bd; }
+  .glossary-grid{ display:grid; grid-template-columns: 1fr; gap: 16px 32px; }
+  @media (min-width: 780px){ .glossary-grid{ grid-template-columns: 1fr 1fr; } }
+  .glossary-grid dt{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:13.5px; color: var(--paper); }
+  .glossary-grid dd{ margin: 3px 0 0; font-size:13px; color:#a9ab9f; }
+
+  /* ---------- Specs table ---------- */
+  table.specs{ width:100%; border-collapse: collapse; font-size: 14px; }
+  table.specs td{ padding: 12px; border-bottom: 1px solid var(--grid-line); color: var(--paper); }
+  table.specs td:first-child{ color:#c7c9bd; width: 42%; }
+  table.specs tr:hover td{ background: rgba(73,214,200,0.05); }
+
+  footer{ max-width:1180px; margin:0 auto; padding: 40px 28px 60px; font-size: 12.5px; color:#767a6f; font-family:'IBM Plex Mono', monospace; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow-row"><span class="dot"></span> Agilent Technologies — Multímetro de banco</div>
+  <h1>34401A<sup>6½ dígitos</sup></h1>
+  <p class="lead">Guía interactiva del panel frontal, pensada para quien usa este multímetro por primera vez. Toca cualquier control para entender qué hace y cómo se usa.</p>
+  <div class="spec-strip mono">
+    <div><div class="num">6½</div><div class="label">DÍGITOS DE RESOLUCIÓN</div></div>
+    <div><div class="num">1000 V</div><div class="label">ENTRADA MÁXIMA DC</div></div>
+    <div><div class="num">3 A</div><div class="label">CORRIENTE MÁXIMA</div></div>
+    <div><div class="num">0,0035%</div><div class="label">EXACTITUD DC BÁSICA</div></div>
+    <div><div class="num">10</div><div class="label">FUNCIONES DE MEDICIÓN</div></div>
+  </div>
+</header>
+
+<section class="quickstart">
+  <div class="section-head"><h2>Primeros pasos</h2><span>De encendido a tu primera lectura</span></div>
+  <div class="quickstart-card">
+    <ol class="qs-steps">
+      <li><p><strong>Enciende el equipo</strong> con el interruptor Power, abajo a la izquierda del panel.</p></li>
+      <li><p><strong>Elige la función</strong> que necesitas en el grupo FUNCTION: DC V, AC V, Ω 2W, Freq o Cont)).</p></li>
+      <li><p><strong>Conecta las puntas en el terminal correcto:</strong> Input VΩ para voltaje o resistencia; el jack rojo de corriente (fusible trasero) solo para amperios.</p></li>
+      <li><p><strong>Confirma el selector Front/Rear</strong>: debe apuntar al mismo par de terminales donde conectaste las puntas.</p></li>
+      <li><p><strong>Dejá el rango en Auto</strong> si no conoces la magnitud de la señal, para evitar una sobrecarga.</p></li>
+      <li><p><strong>Usa Null, Min/Max o dB/dBm</strong> desde el grupo MATH si tu medición lo requiere, y lee el resultado en la pantalla.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="panel-section">
+  <div class="panel-toolbar">
+    <p class="instruction">Control activo: <strong id="active-label">ninguno</strong></p>
+    <button class="zoom-launcher" id="zoom-open">Ver más grande ⤢</button>
+  </div>
+  <div class="panel-wrap">
+    <div id="panel-host">
+      <div class="chassis" id="chassis">
+        <div class="panel">
+
+          <div class="bezel-left">
+            <div class="brand">
+              <span class="model">AGILENT · 34401A</span>
+              <span class="sub">6½ DIGIT MULTIMETER</span>
+            </div>
+
+            <button class="screen hotspot" id="scope-screen" data-key="display" aria-label="Pantalla">
+              <div class="vfd-off"></div>
+              <div class="vfd-reading"><span>5.23456</span><span class="unit">VDC</span></div>
+            </button>
+
+            <div class="controls-row">
+              <div class="power-col">
+                <button class="power-btn hotspot" id="power-btn" data-key="power" aria-label="Power"></button>
+                <div class="power-label">Power<br><span>▪ Off</span><br><span class="on">▪ On</span></div>
+              </div>
+
+              <div class="buttons-grid">
+                <div class="button-row">
+                  <div class="hotspot" data-key="function" tabindex="0" role="button" style="grid-column: 1 / 6;">
+                    <span class="cap">FUNCTION</span>
+                    <div class="key-row-flex">
+                      <div class="keybtn"><span class="shift">DC I</span>DC V</div>
+                      <div class="keybtn"><span class="shift">AC I</span>AC V</div>
+                      <div class="keybtn"><span class="shift">Ω 4W</span>Ω 2W</div>
+                      <div class="keybtn"><span class="shift">Period</span>Freq</div>
+                      <div class="keybtn"><span class="shift">→|</span>Cont ))</div>
+                    </div>
+                  </div>
+                  <div class="hotspot" data-key="math" tabindex="0" role="button" style="grid-column: 6 / 8;">
+                    <span class="cap">MATH</span>
+                    <div class="key-row-flex">
+                      <div class="keybtn"><span class="shift">dB</span>Null</div>
+                      <div class="keybtn"><span class="shift">dBm</span>Min Max</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="button-row">
+                  <div class="hotspot" data-key="menu" tabindex="0" role="button" style="grid-column: 1 / 3;">
+                    <span class="cap">MENU</span>
+                    <div class="key-row-flex">
+                      <div class="keybtn"><span class="shift">On/Off</span>‹</div>
+                      <div class="keybtn"><span class="shift">Recall</span>›</div>
+                    </div>
+                    <span class="subcap">Choices</span>
+                  </div>
+                  <div class="hotspot" data-key="rangedigits" tabindex="0" role="button" style="grid-column: 3 / 6;">
+                    <span class="cap">RANGE / DIGITS</span>
+                    <div class="key-row-flex">
+                      <div class="keybtn"><span class="shift">4</span>▾</div>
+                      <div class="keybtn"><span class="shift">5</span>▴</div>
+                      <div class="keybtn"><span class="shift">6</span>Auto/Man</div>
+                    </div>
+                    <span class="subcap">Level · Enter</span>
+                  </div>
+                  <div class="hotspot" data-key="trig" tabindex="0" role="button" style="grid-column: 6 / 8;">
+                    <span class="cap">&nbsp;</span>
+                    <div class="key-row-flex">
+                      <div class="keybtn"><span class="shift">Auto/Hold</span>Single</div>
+                      <div class="keybtn"><span class="shift">Local</span>Shift</div>
+                    </div>
+                    <span class="subcap">Trig · Local</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bezel-right">
+            <div class="jacks-header">
+              <span class="cap" style="text-align:center;">Ω4W SENSE /<br>RATIO REF</span>
+              <span class="cap" style="text-align:center;">INPUT<br>VΩ→|</span>
+            </div>
+            <div class="hotspot" data-key="inputs" tabindex="0" role="button">
+              <div class="jacks-grid">
+                <div class="jack-col"><div class="jack hi"></div><span class="jack-label">HI</span></div>
+                <div class="jack-col"><div class="jack hi"></div><span class="jack-label">HI · 1000V Max</span></div>
+              </div>
+              <div class="jacks-grid" style="margin-top:14px;">
+                <div class="jack-col"><div class="jack lo"></div><span class="jack-label">LO</span></div>
+                <div class="jack-col"><div class="jack lo"></div><span class="jack-label">LO</span></div>
+              </div>
+            </div>
+
+            <div class="terminals-row">
+              <div class="power-col">
+                <button class="power-btn hotspot" id="terminals-btn" data-key="terminals" aria-label="Terminals"></button>
+                <div class="power-label">Terminals<br><span id="lbl-front" class="on">▪ Front</span><br><span id="lbl-rear">▪ Rear</span></div>
+              </div>
+              <div class="hotspot" data-key="inputs" tabindex="0" role="button" style="flex:1;">
+                <span class="cap" style="text-align:center;">FUSED · CORRIENTE (I)</span>
+                <div class="jacks-grid" style="grid-template-columns:1fr;">
+                  <div class="jack-col"><div class="jack hi"></div><span class="jack-label">I · 3 A RMS · fusible trasero</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="reference-section">
+  <div class="section-head"><h2>Referencia rápida</h2><span>Toca un control para expandirlo</span></div>
+  <div class="ref-groups" id="ref-groups"></div>
+</section>
+
+<section class="tips-section">
+  <div class="section-head"><h2>Consejos y errores comunes</h2><span>Para quien empieza</span></div>
+  <p class="section-note">Con un multímetro, casi todos los sustos vienen de conectar las puntas en el jack equivocado o de elegir mal el rango. Esto es lo que conviene tener siempre presente.</p>
+  <div class="tips-grid">
+    <div class="tips-col tips">
+      <h3>Tips para empezar</h3>
+      <div class="tip-item"><strong>Empieza en Auto o en el rango más alto</strong><span>Si no conoces la magnitud de la señal, deja el equipo en rango automático antes de medir, así evitas sobrecargarlo.</span></div>
+      <div class="tip-item"><strong>Usa el terminal correcto para cada medición</strong><span>Input VΩ para voltaje y resistencia; el jack de corriente (con fusible) solo cuando midas amperios.</span></div>
+      <div class="tip-item"><strong>Usa Null antes de medir resistencias pequeñas</strong><span>Resta automáticamente la resistencia de tus propias puntas de prueba, para que no se sume a la lectura.</span></div>
+      <div class="tip-item"><strong>Usa Ω4W en resistencias muy bajas</strong><span>La medición a 4 hilos elimina el error que introduce la resistencia de los cables de prueba.</span></div>
+      <div class="tip-item"><strong>Respeta el límite de tensión</strong><span>El equipo admite hasta 1000 V DC / 750 V AC. Verifica el rango de tu señal antes de conectar.</span></div>
+      <div class="tip-item"><strong>Aprovecha Min/Max</strong><span>Captura picos o caídas breves de una señal que no verías solo mirando la lectura instantánea.</span></div>
+    </div>
+    <div class="tips-col errors">
+      <h3>Errores comunes</h3>
+      <div class="error-item"><strong>Medir corriente en el jack de voltaje</strong><span>Conectar la punta al jack equivocado según la función seleccionada da lecturas erróneas o puede fundir el fusible interno.</span></div>
+      <div class="error-item"><strong>Medir resistencia con el circuito encendido</strong><span>La función Ω solo debe usarse sin alimentación en el circuito; de lo contrario, la lectura es incorrecta y puedes dañar el equipo.</span></div>
+      <div class="error-item"><strong>Olvidar que Ω2W incluye las puntas</strong><span>En resistencias muy bajas, la resistencia de los propios cables distorsiona la lectura; para eso existe Ω4W.</span></div>
+      <div class="error-item"><strong>Confundir continuidad con diodo</strong><span>Cont)) emite un pitido ante baja resistencia; el modo diodo mide la caída de tensión de una unión, no continuidad.</span></div>
+      <div class="error-item"><strong>No revisar el fusible tras una sobrecarga</strong><span>Si el equipo deja de medir corriente, es probable que el fusible interno se haya fundido durante una medición anterior.</span></div>
+      <div class="error-item"><strong>Ignorar el selector Front/Rear</strong><span>Si tus puntas están en un par de terminales pero el selector apunta al otro, el equipo no detecta ninguna señal.</span></div>
+    </div>
+  </div>
+
+  <div class="glossary">
+    <h3>Glosario rápido</h3>
+    <dl class="glossary-grid">
+      <div><dt>6½ dígitos</dt><dd>Muestra seis dígitos completos más uno parcial — indica la resolución con la que se lee la señal, no solo cuántas cifras caben en pantalla.</dd></div>
+      <div><dt>True RMS</dt><dd>Mide el valor eficaz real de una señal AC, incluso si no es una onda senoidal perfecta.</dd></div>
+      <div><dt>Resistencia 2 hilos vs 4 hilos</dt><dd>A 2 hilos las mismas puntas fuerzan corriente y miden voltaje; a 4 hilos se usa un par separado, eliminando el error de los cables.</dd></div>
+      <div><dt>Null (relativa)</dt><dd>Resta un valor de referencia a todas las lecturas siguientes, útil para descontar offsets fijos.</dd></div>
+      <div><dt>dB / dBm</dt><dd>Mediciones logarítmicas de nivel de señal, referenciadas a una impedancia o potencia de referencia.</dd></div>
+      <div><dt>GPIB</dt><dd>Bus de interfaz estándar para conectar y controlar instrumentos de laboratorio desde una computadora.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="specs-section">
+  <div class="section-head"><h2>Especificaciones técnicas</h2><span>Agilent 34401A</span></div>
+  <table class="specs">
+    <tbody>
+      <tr><td>Resolución</td><td>6½ dígitos</td></tr>
+      <tr><td>Exactitud DC básica</td><td>0,0035% (24 horas)</td></tr>
+      <tr><td>Exactitud AC básica</td><td>0,06% (1 año)</td></tr>
+      <tr><td>Ancho de banda AC (true RMS)</td><td>3 Hz a 300 kHz</td></tr>
+      <tr><td>Tensión máxima de entrada</td><td>1000 V DC · 750 V AC RMS</td></tr>
+      <tr><td>Corriente máxima de entrada</td><td>3 A, con fusible</td></tr>
+      <tr><td>Funciones de medición</td><td>DCV, ACV, DCI, ACI, resistencia 2 y 4 hilos, frecuencia, periodo, continuidad, diodo</td></tr>
+      <tr><td>Velocidad de lectura</td><td>Hasta 1000 lecturas/s directo a GPIB</td></tr>
+      <tr><td>Memoria interna</td><td>512 lecturas</td></tr>
+      <tr><td>Funciones matemáticas</td><td>Null, Min/Max/Promedio, dB, dBm, prueba de límites</td></tr>
+      <tr><td>Interfaces</td><td>GPIB y RS-232</td></tr>
+      <tr><td>Lenguajes de programación</td><td>SCPI, Agilent 3478A y Fluke 8840A/8842A (compatibilidad de software)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  Guía de referencia no oficial elaborada a partir de las especificaciones públicas de Agilent Technologies (hoy Keysight) para el modelo 34401A. No sustituye al manual de usuario original del fabricante.
+</footer>
+
+<!-- Zoom modal -->
+<div class="zoom-modal" id="zoom-modal" hidden>
+  <div class="zoom-topbar">
+    <span class="zoom-hint mono">Desliza para recorrer el panel ampliado — los controles siguen siendo interactivos</span>
+    <button class="zoom-close" id="zoom-close">✕ Cerrar</button>
+  </div>
+  <div class="zoom-scroll" id="zoom-scroll"></div>
+</div>
+
+<!-- Floating callout -->
+<div class="callout" id="callout" role="status">
+  <button class="callout-close" id="callout-close" aria-label="Cerrar">✕</button>
+  <div class="callout-group" id="callout-group"></div>
+  <h4 id="callout-title"></h4>
+  <p id="callout-text"></p>
+</div>
+
+<script>
+const DATA = {
+  display: { group:"PANTALLA", title:"Pantalla VFD",
+    short:"Muestra la lectura actual con hasta 6½ dígitos de resolución.",
+    body:["Pantalla fluorescente de vacío (VFD) que muestra la medición en curso con hasta 6½ dígitos de resolución.",
+      "También indica, con pequeños rótulos, qué función y qué modo (Auto, Null, Min/Max, etc.) están activos en ese momento."] },
+  power: { group:"SISTEMA", title:"Interruptor de encendido",
+    short:"Enciende y apaga el equipo.",
+    body:["Enciende y apaga el multímetro. Al arrancar, el equipo recupera la configuración con la que se apagó por última vez, incluida la función de medición activa."] },
+  function: { group:"MEDICIÓN", title:"Function — funciones de medición",
+    short:"Elige qué magnitud eléctrica vas a medir.",
+    body:["Cada tecla tiene una función principal y otra secundaria (en azul, arriba), accesible con la tecla Shift.",
+      "DC V / DC I: voltaje o corriente continua. AC V / AC I: voltaje o corriente alterna (verdadero RMS).",
+      "Ω 2W / Ω 4W: resistencia a 2 o 4 hilos — usa 4 hilos para resistencias muy pequeñas, ya que elimina el error de los cables.",
+      "Freq / Period: frecuencia o periodo de una señal.",
+      "Cont)) / diodo (→|): prueba de continuidad con pitido, o medición de la caída de tensión en una unión (diodo)."],
+    steps:["Pulsa la función principal que necesitas, o Shift + la tecla para la función secundaria.","Conecta las puntas en el terminal correspondiente a esa función.","Lee el resultado en la pantalla VFD."] },
+  math: { group:"MATEMÁTICAS", title:"Math — Null y Min/Max",
+    short:"Null resta un valor de referencia; Min/Max captura picos.",
+    body:["Null (relativa): guarda la lectura actual como referencia y la resta de todas las mediciones siguientes — útil para descontar la resistencia de las puntas de prueba.",
+      "Min/Max: registra los valores mínimo y máximo alcanzados durante la medición, ideal para detectar picos o caídas breves.",
+      "Con Shift, estas mismas teclas acceden a mediciones logarítmicas dB y dBm."] },
+  menu: { group:"NAVEGACIÓN", title:"Menu — flechas de navegación",
+    short:"Navegan los menús en pantalla; con Shift acceden a On/Off y Recall.",
+    body:["Las flechas ‹ › recorren las opciones del menú en pantalla (CHOICES).",
+      "Con Shift, la flecha izquierda activa On/Off de una función y la derecha recupera (Recall) una configuración guardada."] },
+  rangedigits: { group:"RANGO", title:"Range / Digits",
+    short:"Sube o baja el rango de medición, o lo deja en automático.",
+    body:["Las flechas ▾ / ▴ cambian manualmente el rango de medición hacia abajo o hacia arriba.",
+      "Auto/Man alterna entre rango automático (recomendado si no conoces la magnitud de la señal) y rango manual (más rápido y estable en mediciones repetitivas).",
+      "Estas mismas teclas, con Shift, funcionan como teclado numérico (4, 5, 6) y como controles de nivel (Level) y confirmación (Enter) dentro de los menús."] },
+  trig: { group:"DISPARO", title:"Trig / Local",
+    short:"Single toma una sola lectura; Shift vuelve al control local.",
+    body:["Single realiza una sola medición bajo demanda, en vez del muestreo continuo — útil para capturar una lectura puntual.",
+      "Shift alterna funciones secundarias y, con Local, devuelve el control del equipo al panel frontal cuando está siendo operado por GPIB o RS-232.",
+      "Auto/Hold (función secundaria de Single) mantiene la lectura en pantalla hasta que cambie de forma estable."] },
+  terminals: { group:"TERMINALES", title:"Selector Front / Rear",
+    short:"Indica al equipo si tus puntas están en los terminales frontales o traseros.",
+    body:["El 34401A tiene terminales tanto en el panel frontal como en el panel trasero. Este botón le indica al equipo cuál de los dos pares debe usar.",
+      "Si tus puntas están conectadas pero el equipo no detecta señal, este selector suele ser la primera causa a revisar."] },
+  inputs: { group:"ENTRADAS", title:"Terminales de entrada",
+    short:"Jacks HI/LO para voltaje, resistencia y corriente, con sus límites.",
+    body:["Ω4W Sense/Ratio Ref (HI/LO): par adicional de terminales para mediciones de resistencia a 4 hilos.",
+      "Input VΩ→| (HI/LO): entrada principal de voltaje, resistencia y diodo, hasta 1000 V DC.",
+      "Terminal de corriente (I), con fusible en el panel trasero: úsalo únicamente cuando la función seleccionada sea DC I o AC I, hasta 3 A RMS."] }
+};
+
+const GROUP_ORDER = ["display","power","function","math","menu","rangedigits","trig","terminals","inputs"];
+
+const activeLabel = document.getElementById('active-label');
+const chassis = document.getElementById('chassis');
+const panelHost = document.getElementById('panel-host');
+
+function setActiveHotspot(key){
+  document.querySelectorAll('.hotspot').forEach(h => h.classList.toggle('active', h.dataset.key === key));
+}
+
+const callout = document.getElementById('callout');
+const calloutGroup = document.getElementById('callout-group');
+const calloutTitle = document.getElementById('callout-title');
+const calloutText = document.getElementById('callout-text');
+
+function showCallout(targetEl, item){
+  calloutGroup.textContent = item.group;
+  calloutTitle.textContent = item.title;
+  calloutText.textContent = item.short;
+  callout.classList.add('show');
+
+  const rect = targetEl.getBoundingClientRect();
+  const cw = callout.offsetWidth, ch = callout.offsetHeight;
+  const margin = 12;
+  let left, top;
+  const spaceRight = window.innerWidth - rect.right;
+  const spaceLeft = rect.left;
+
+  if(spaceRight > cw + margin + 8){ left = rect.right + margin; top = rect.top; }
+  else if(spaceLeft > cw + margin + 8){ left = rect.left - cw - margin; top = rect.top; }
+  else {
+    left = rect.left;
+    if(rect.bottom + ch + margin < window.innerHeight){ top = rect.bottom + margin; }
+    else { top = rect.top - ch - margin; }
+  }
+  left = Math.min(Math.max(8, left), window.innerWidth - cw - 8);
+  top = Math.min(Math.max(8, top), window.innerHeight - ch - 8);
+  callout.style.left = left + 'px';
+  callout.style.top = top + 'px';
+}
+function hideCallout(){ callout.classList.remove('show'); }
+
+function jumpToReference(key){
+  const itemEl = document.getElementById('ref-' + key);
+  if(!itemEl) return;
+  const body = itemEl.querySelector('.ref-body');
+  const toggle = itemEl.querySelector('.ref-toggle');
+  if(body && body.hidden){
+    body.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.querySelector('.ref-icon').textContent = '–';
+  }
+  itemEl.scrollIntoView({ behavior:'smooth', block:'center' });
+  itemEl.classList.add('flash-ref');
+  setTimeout(() => itemEl.classList.remove('flash-ref'), 1200);
+}
+
+document.getElementById('callout-close').addEventListener('click', hideCallout);
+document.addEventListener('click', (e) => {
+  if(callout.classList.contains('show') && !callout.contains(e.target) && !e.target.closest('.hotspot')){
+    hideCallout();
+  }
+});
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') hideCallout(); });
+
+function activate(key, opts = {}){
+  const item = DATA[key];
+  if(!item) return;
+  activeLabel.textContent = item.title;
+  setActiveHotspot(key);
+  const isZoomed = chassis.parentElement === zoomScroll;
+  if(isZoomed && opts.sourceEl){
+    showCallout(opts.sourceEl, item);
+  } else {
+    hideCallout();
+    jumpToReference(key);
+  }
+}
+
+document.querySelectorAll('.hotspot').forEach(h => {
+  h.addEventListener('click', () => activate(h.dataset.key, { sourceEl: h }));
+  h.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); activate(h.dataset.key, { sourceEl: h }); }
+  });
+});
+
+/* ---------- Zoom modal (iOS-safe scroll lock) ---------- */
+const zoomModal = document.getElementById('zoom-modal');
+const zoomScroll = document.getElementById('zoom-scroll');
+let savedScrollY = 0;
+
+document.getElementById('zoom-open').addEventListener('click', () => {
+  savedScrollY = window.scrollY || window.pageYOffset || 0;
+  zoomScroll.appendChild(chassis);
+  zoomModal.hidden = false;
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${savedScrollY}px`;
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+});
+function closeZoom(){
+  panelHost.appendChild(chassis);
+  zoomModal.hidden = true;
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.width = '';
+  window.scrollTo(0, savedScrollY);
+}
+document.getElementById('zoom-close').addEventListener('click', closeZoom);
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && !zoomModal.hidden) closeZoom(); });
+
+/* ---------- Power on/off (VFD boot animation) ---------- */
+const scopeScreen = document.getElementById('scope-screen');
+function turnScreenOn(){ scopeScreen.classList.add('is-on'); }
+document.getElementById('power-btn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  scopeScreen.classList.toggle('is-on');
+  activate('power', { sourceEl: e.currentTarget });
+});
+setTimeout(turnScreenOn, 900);
+
+/* ---------- Front/Rear terminals toggle ---------- */
+const terminalsBtn = document.getElementById('terminals-btn');
+const lblFront = document.getElementById('lbl-front');
+const lblRear = document.getElementById('lbl-rear');
+terminalsBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  lblFront.classList.toggle('on');
+  lblRear.classList.toggle('on');
+  activate('terminals', { sourceEl: terminalsBtn });
+});
+
+/* ---------- Reference accordion ---------- */
+const refGroupsEl = document.getElementById('ref-groups');
+const groupsMap = {};
+GROUP_ORDER.forEach(key => {
+  const g = DATA[key].group;
+  (groupsMap[g] = groupsMap[g] || []).push(key);
+});
+
+Object.keys(groupsMap).forEach(groupName => {
+  const groupEl = document.createElement('div');
+  groupEl.className = 'ref-group';
+  const h4 = document.createElement('h4');
+  h4.textContent = groupName;
+  groupEl.appendChild(h4);
+
+  groupsMap[groupName].forEach(key => {
+    const item = DATA[key];
+    const itemEl = document.createElement('div');
+    itemEl.className = 'ref-item';
+    itemEl.id = 'ref-' + key;
+
+    const toggle = document.createElement('button');
+    toggle.className = 'ref-toggle';
+    toggle.dataset.key = key;
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.innerHTML = `<span>${item.title}</span><span class="ref-icon mono">+</span>`;
+
+    const preview = document.createElement('p');
+    preview.className = 'ref-preview';
+    preview.textContent = item.short;
+
+    const body = document.createElement('div');
+    body.className = 'ref-body';
+    body.hidden = true;
+    let bodyHtml = '';
+    item.body.forEach(p => { bodyHtml += `<p>${p}</p>`; });
+    bodyHtml += '<button class="ref-jump mono" data-key="' + key + '">Ver este control en el panel ↑</button>';
+    body.innerHTML = bodyHtml;
+
+    toggle.addEventListener('click', () => {
+      const isOpen = !body.hidden;
+      body.hidden = isOpen;
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+      toggle.querySelector('.ref-icon').textContent = isOpen ? '+' : '–';
+      setActiveHotspot(key);
+      activeLabel.textContent = item.title;
+    });
+
+    itemEl.appendChild(toggle);
+    itemEl.appendChild(preview);
+    itemEl.appendChild(body);
+    groupEl.appendChild(itemEl);
+  });
+
+  refGroupsEl.appendChild(groupEl);
+});
+
+refGroupsEl.addEventListener('click', (e) => {
+  const jumpBtn = e.target.closest('.ref-jump');
+  if(!jumpBtn) return;
+  const key = jumpBtn.dataset.key;
+  activate(key, {});
+  const hotspotEl = document.querySelector(`.hotspot[data-key="${key}"]`);
+  if(hotspotEl){
+    hotspotEl.scrollIntoView({ behavior:'smooth', block:'center' });
+    hotspotEl.classList.add('flash');
+    setTimeout(() => hotspotEl.classList.remove('flash'), 1000);
+  }
+});
+</script>
+
+</body>
+</html>

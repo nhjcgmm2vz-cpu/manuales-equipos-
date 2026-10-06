@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>54621A — Manual interactivo del panel frontal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14171a;
+    --grid-line: rgba(126,167,120,0.10);
+    --grid-line-strong: rgba(126,167,120,0.22);
+    --cream:#eef0ec;
+    --cream-shadow:#d3d6cf;
+    --cream-deep:#b9bdb5;
+    --screen:#0a100d;
+    --phosphor:#5fd67a;
+    --phosphor-dim: rgba(95,214,122,0.35);
+    --ink:#211f1a;
+    --ink-soft:#4a463c;
+    --amber:#dea22e;
+    --amber-dark:#a3711a;
+    --leaf:#6ea83a;
+    --leaf-dark:#4d7a27;
+    --paper:#f3f0e6;
+    --paper-line: rgba(33,31,26,0.10);
+    --focus:#3f8cc4;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html, body{ overflow-x:hidden; max-width:100%; }
+  *, *::before, *::after{ -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact; }
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(0deg, var(--grid-line) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(90deg, var(--grid-line) 0 1px, transparent 1px 64px),
+      var(--bg);
+    color: var(--paper);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+  }
+  ::selection{ background: var(--phosphor-dim); }
+  a{ color: var(--phosphor); }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  .hero{ max-width: 1180px; margin: 0 auto; padding: 72px 28px 40px; position:relative; }
+  .hero::before{ content:""; position:absolute; left:28px; right:28px; top:0; height:1px; background: var(--grid-line-strong); }
+  .eyebrow-row{ display:flex; align-items:center; gap:14px; font-family:'IBM Plex Mono', monospace; font-size:13px; color: var(--phosphor); margin-bottom:22px; }
+  .eyebrow-row .dot{ width:8px;height:8px;border-radius:50%; background: var(--phosphor); box-shadow: 0 0 8px var(--phosphor); }
+  .hero h1{ font-family:'IBM Plex Mono', monospace; font-weight:700; font-size: clamp(38px, 6.4vw, 78px); letter-spacing: -0.01em; margin: 0 0 6px; color: var(--paper); }
+  .hero h1 sup{ font-size: 0.28em; font-weight:500; color: var(--phosphor); vertical-align: super; margin-left: 10px; }
+  .hero p.lead{ max-width: 620px; font-size: 18px; color: #cfd0c9; margin: 0 0 34px; }
+  .spec-strip{ display:flex; flex-wrap:wrap; border-top: 1px solid var(--grid-line-strong); border-bottom: 1px solid var(--grid-line-strong); }
+  .spec-strip div{ padding: 16px 26px 16px 0; margin-right: 26px; border-right: 1px solid var(--grid-line-strong); font-family:'IBM Plex Mono', monospace; }
+  .spec-strip div:last-child{ border-right:none; }
+  .spec-strip .num{ font-size: 20px; font-weight:600; color: var(--paper); }
+  .spec-strip .label{ font-size: 11px; color:#9a9c92; letter-spacing:.03em; margin-top:2px; }
+
+  section{ max-width: 1180px; margin: 72px auto 0; padding: 0 28px; }
+  .section-head{ display:flex; align-items:baseline; justify-content:space-between; gap: 20px; border-bottom: 1px solid var(--grid-line-strong); padding-bottom: 14px; margin-bottom: 28px; }
+  .section-head h2{ font-family:'IBM Plex Mono', monospace; font-size: 26px; margin:0; font-weight:600; }
+  .section-head span{ font-size:13px; color:#9a9c92; font-family:'IBM Plex Mono', monospace;}
+  .section-note{ font-size:14.5px; color:#a9ab9f; max-width:640px; margin:-16px 0 28px; }
+
+  .quickstart-card{ background: var(--paper); color: var(--ink); border-radius: 12px; padding: 30px; }
+  .qs-steps{ list-style:none; margin:0; padding:0; counter-reset: qs; }
+  .qs-steps li{ counter-increment: qs; display:flex; gap:16px; padding: 16px 0; border-top: 1px solid var(--paper-line); }
+  .qs-steps li:first-child{ border-top:none; padding-top:4px; }
+  .qs-steps li::before{ content: counter(qs); font-family:'IBM Plex Mono', monospace; font-weight:700; font-size:14px; color: var(--focus); width:26px; height:26px; border-radius:50%; border:1.5px solid var(--focus); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .qs-steps p{ margin:0; font-size:14.5px; color:#3a362c; }
+  .qs-steps strong{ color: var(--ink); }
+
+  .panel-section{ display:block; }
+  .panel-toolbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom: 14px; flex-wrap:wrap; }
+  .instruction{ font-family:'IBM Plex Mono', monospace; font-size: 13px; color:#9a9c92; margin:0; }
+  .instruction strong{ color: var(--phosphor); font-weight:600; }
+  .zoom-launcher{ font-family:'IBM Plex Mono', monospace; font-size: 12px; font-weight:600; color: var(--bg); background: var(--phosphor); border:none; border-radius: 999px; padding: 8px 14px; display:inline-flex; align-items:center; gap:6px; cursor:pointer; white-space:nowrap; transition: transform .08s ease; }
+  .zoom-launcher:hover{ filter:brightness(1.08); }
+  .zoom-launcher:active{ transform: scale(.95); }
+  .zoom-launcher:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .panel-wrap{ position:relative; }
+
+  .chassis{ background: linear-gradient(180deg, #cfd2cd, #a9aca6); border-radius: 14px; padding: 10px; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6); }
+  .panel{ display:grid; grid-template-columns: 1.05fr 1.55fr; gap: 8px; background: var(--cream-deep); border-radius: 8px; padding: 8px; }
+  @media (max-width: 640px){ .panel{ grid-template-columns: 1fr; } }
+  .bezel-left, .bezel-right{ background: var(--cream); border-radius: 6px; padding: 16px; }
+
+  .brand{ font-family:'IBM Plex Mono', monospace; color: var(--ink); font-size: 13px; font-weight:600; margin-bottom: 12px; display:flex; flex-direction:column; gap:2px; }
+  .brand .model{ font-size:15px; }
+  .brand .sub{ font-weight:400; font-size:10.5px; color: var(--ink-soft); letter-spacing:.02em; }
+
+  .screen-row{ display:flex; gap:8px; }
+  .screen{ flex:1; aspect-ratio: 4/3; background: var(--screen); border-radius: 4px; border: 8px solid #17140f; box-shadow: 0 0 0 2px #6b7280; position:relative; overflow:hidden; cursor:pointer; padding:0; -webkit-appearance:none; appearance:none; }
+  .screen svg{ position:absolute; inset:0; width:100%; height:100%; }
+
+  .softkeys{ display:flex; flex-direction:column; justify-content:space-between; padding: 6px 0; }
+  .softkey-btn{ width: 30px; height: 15%; background: linear-gradient(180deg,#f4f1e6,#c7c0a9); border: 1px solid var(--cream-deep); border-radius: 3px; box-shadow: 0 2px 0 var(--cream-deep); cursor:pointer; transition: transform .08s ease, box-shadow .08s ease; }
+  .softkey-btn:active{ transform: translateY(2px); box-shadow:none; }
+
+  .row-below-screen{ display:flex; align-items:center; justify-content:space-between; margin-top: 14px; gap:10px; }
+  .mini-btn{ display:flex; flex-direction:column; align-items:center; gap:6px; background:none; border:none; cursor:pointer; padding: 4px 8px; border-radius: 8px; transition: transform .08s ease; }
+  .mini-btn:active{ transform: scale(.93); }
+  .mini-btn .knob-dot{ width: 32px; height:32px; border-radius:50%; background: radial-gradient(circle at 35% 30%, #f6f3e9, #b9b193 75%); border: 1px solid var(--cream-deep); position:relative; cursor:grab; touch-action:none; }
+  .mini-btn .lbl{ font-family:'IBM Plex Mono', monospace; font-size:9px; color:var(--ink-soft); text-align:center; line-height:1.2; }
+  .floppy-power{ display:flex; align-items:center; gap:10px; }
+  .floppy-drive{ width:52px; height:20px; background: linear-gradient(180deg,#4a4740,#211f1a); border-radius:2px; border:1px solid #000; position:relative; display:flex; align-items:center; padding:0 4px; }
+  .floppy-drive .slot{ flex:1; height:4px; background:#050505; border-radius:1px; }
+  .floppy-drive .eject{ width:6px; height:10px; background: linear-gradient(180deg,#c7c0a9,#8f8873); border-radius:1px; margin-left:4px; }
+  .floppy-drive .led{ width:4px; height:4px; border-radius:50%; background:#4a1a15; margin-left:4px; }
+  .power-btn{ width: 30px; height:30px; border-radius: 50%; background: linear-gradient(180deg,#f6f3e9,#c7c0a9); border: 1px solid var(--cream-deep); box-shadow: 0 2px 0 var(--cream-deep); cursor:pointer; transition: transform .08s ease, box-shadow .08s ease; display:flex; align-items:center; justify-content:center; font-size:13px; color: var(--ink-soft); line-height:1; }
+  .power-btn:active{ transform: translateY(2px); box-shadow:none; }
+
+  .hotspot{ border: 1px solid transparent; border-radius: 10px; background: transparent; cursor: pointer; text-align:left; font: inherit; color: inherit; padding: 8px; transition: background .15s ease, border-color .15s ease; position:relative; }
+  .hotspot:hover{ background: rgba(33,31,26,0.05); }
+  .hotspot:focus-visible{ outline: 2px solid var(--focus); outline-offset: 2px; }
+  .hotspot.active{ background: rgba(63,140,196,0.10); border-color: var(--focus); }
+  .hotspot.flash{ animation: flashPulse 1s ease; }
+  @keyframes flashPulse{ 0%{ box-shadow:0 0 0 0 rgba(63,140,196,.55);} 100%{ box-shadow:0 0 0 16px rgba(63,140,196,0);} }
+  .hotspot .cap{ font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing:.03em; color: var(--ink-soft); margin-bottom: 8px; display:block; }
+
+  .btn-pill{ background: linear-gradient(180deg,#f4f1e6,#c7c0a9); border: 1px solid var(--cream-deep); border-radius: 999px; padding: 6px 12px; font-size: 12px; font-weight:600; color: var(--ink); box-shadow: 0 2px 0 var(--cream-deep); }
+  .btn-pill.amber{ background: linear-gradient(180deg,#f6e6c2,#e6c07f); }
+  .btn-pill.glow-on, .btn-square.glow-on, .chan-tag.glow-on{ background: linear-gradient(180deg,#a8f08a,#5fc94a); box-shadow: 0 0 10px rgba(126,230,90,0.8), 0 2px 0 #4a9c3a; color:#16330f; }
+  .btn-square{ background: linear-gradient(180deg,#f4f1e6,#c7c0a9); border: 1px solid var(--cream-deep); border-radius: 6px; padding: 6px 8px; font-size: 10.5px; font-weight:600; color: var(--ink); box-shadow: 0 2px 0 var(--cream-deep); text-align:center; }
+  .knob{ width: 46px; height:46px; border-radius:50%; background: radial-gradient(circle at 35% 30%, #fbf8ee, #b9b193 78%); border: 1px solid var(--cream-deep); position:relative; flex-shrink:0; cursor:grab; touch-action:none; }
+  .knob:active{ cursor:grabbing; filter:brightness(.96); }
+  .knob-tick{ position:absolute; inset:0; pointer-events:none; transform: rotate(0deg); }
+  .knob-tick::before{ content:""; position:absolute; top:6px; left:50%; width:2px; height:10px; background: var(--ink-soft); transform: translateX(-50%); }
+  .knob.dot-amber::before, .knob.dot-leaf::before{ content:""; position:absolute; width:9px; height:9px; border-radius:50%; top: 50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
+  .knob.dot-amber::before{ background: var(--amber); box-shadow:0 0 0 2px #fff8, 0 1px 2px rgba(0,0,0,.3);}
+  .knob.dot-leaf::before{ background: var(--leaf); box-shadow:0 0 0 2px #fff8, 0 1px 2px rgba(0,0,0,.3);}
+  .knob.small{ width:34px; height:34px; }
+
+  .right-grid{ display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; }
+  .area-horizontal{ grid-column: 1 / 3; grid-row: 1; }
+  .area-runcontrol{ grid-column: 3 / 5; grid-row: 1; }
+  .area-measure{ grid-column: 1 / 2; grid-row: 2; }
+  .area-waveform{ grid-column: 2 / 3; grid-row: 2; }
+  .area-autoscale{ grid-column: 1 / 2; grid-row: 3; }
+  .area-file{ grid-column: 2 / 3; grid-row: 3; }
+  .area-trigger{ grid-column: 3 / 5; grid-row: 2 / 4; }
+  .area-vertical{ grid-column: 1 / 3; grid-row: 4; }
+  .area-inputs-left{ grid-column: 1 / 3; grid-row: 5; }
+  .area-inputs-right{ grid-column: 3 / 5; grid-row: 5; }
+
+  .area-horizontal .row, .area-runcontrol .row, .area-waveform .row, .area-measure .row, .area-file .row, .area-autoscale .row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+
+  .vertical-sub{ display:grid; grid-template-columns: 1fr 0.7fr 1fr; gap:6px; }
+  .chan-col{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .chan-col .knobs{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .chan-tag{ font-family:'IBM Plex Mono', monospace; font-weight:700; font-size:12px; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; background: var(--paper); border:1px solid var(--cream-deep); }
+  .chan-tag.amber{ color:var(--amber-dark); }
+  .chan-tag.leaf{ color:var(--leaf-dark); }
+  .mathref-col{ display:flex; flex-direction:column; gap:8px; align-items:center; justify-content:center; }
+
+  .trigger-sub{ display:grid; grid-template-columns: 1fr 1fr; gap:6px; }
+  .trigger-sub .knob-wrap{ display:flex; flex-direction:column; align-items:center; gap:4px; grid-column: 1 / 3; }
+
+  .inputs-row{ display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  .bnc{ width:30px;height:30px;border-radius:50%; background: radial-gradient(circle at 35% 30%, #efece1, #9a927a 80%); border: 3px solid var(--ink-soft); position:relative; }
+  .bnc.amber{ box-shadow: inset 0 0 0 3px var(--amber); }
+  .bnc.leaf{ box-shadow: inset 0 0 0 3px var(--leaf); }
+  .bnc-label{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--ink-soft); }
+
+  @media (max-width: 560px){
+    .right-grid{ grid-template-columns: 1fr 1fr; }
+    .area-horizontal{ grid-column: 1 / 3; grid-row: 1; }
+    .area-runcontrol{ grid-column: 1 / 3; grid-row: 2; }
+    .area-measure{ grid-column: 1 / 2; grid-row: 3; }
+    .area-waveform{ grid-column: 2 / 3; grid-row: 3; }
+    .area-autoscale{ grid-column: 1 / 2; grid-row: 4; }
+    .area-file{ grid-column: 2 / 3; grid-row: 4; }
+    .area-trigger{ grid-column: 1 / 3; grid-row: 5; }
+    .area-vertical{ grid-column: 1 / 3; grid-row: 6; }
+    .area-inputs-left{ grid-column: 1 / 2; grid-row: 7; }
+    .area-inputs-right{ grid-column: 2 / 3; grid-row: 7; }
+    .knob{ width:38px; height:38px; }
+    .knob.small{ width:28px; height:28px; }
+    .btn-pill, .btn-square{ font-size:10px; padding:5px 6px; }
+    .hotspot{ padding:8px 6px; }
+    .bezel-left, .bezel-right{ padding:10px; }
+  }
+
+  .zoom-modal{ position:fixed; inset:0; background: rgba(9,11,10,0.94); z-index:100; display:flex; flex-direction:column; }
+  .zoom-modal[hidden]{ display:none; }
+  .zoom-topbar{ display:flex; justify-content:space-between; align-items:center; padding: 14px 18px; }
+  .zoom-hint{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:#9a9c92; }
+  .zoom-close{ background: var(--paper); border:none; border-radius:999px; padding:9px 16px; font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:13px; cursor:pointer; }
+  .zoom-scroll{ flex:1; overflow:auto; -webkit-overflow-scrolling:touch; padding: 10px 20px 40px; }
+  .zoom-scroll .chassis{ width: min(880px, 94vw); max-width:none; margin:0 auto; }
+
+  .callout{ position:fixed; max-width:250px; background: var(--paper); color: var(--ink); border-radius: 10px; padding: 14px 34px 14px 16px; box-shadow: 0 14px 34px rgba(0,0,0,.5); font-size: 13.5px; z-index:150; opacity:0; transform: translateY(4px) scale(.98); pointer-events:none; transition: opacity .15s ease, transform .15s ease; }
+  .callout.show{ opacity:1; transform: translateY(0) scale(1); pointer-events:auto; }
+  .callout .callout-group{ font-family:'IBM Plex Mono', monospace; font-size:10px; color: var(--amber-dark); letter-spacing:.03em; margin-bottom:4px; }
+  .callout h4{ margin:0 0 6px; font-family:'IBM Plex Mono', monospace; font-size:13.5px; }
+  .callout p{ margin:0; color:#3a362c; }
+  .callout-close{ position:absolute; top:8px; right:10px; background:none; border:none; font-size:13px; cursor:pointer; color:#8a8672; line-height:1; padding:2px; }
+
+  .ref-groups{ columns: 2 340px; column-gap: 40px; }
+  @media (max-width: 640px){ .ref-groups{ columns: 1; } }
+  .ref-group{ break-inside: avoid; margin-bottom: 30px; }
+  .ref-group > h4{ font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--phosphor); margin: 0 0 10px; }
+  .ref-item{ border-top: 1px solid var(--grid-line-strong); border-radius: 6px; transition: background .3s ease; }
+  .ref-item.flash-ref{ background: rgba(95,214,122,0.12); }
+  .ref-item:last-child{ border-bottom: 1px solid var(--grid-line-strong); }
+  .ref-toggle{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; background:none; border:none; text-align:left; color: var(--paper); font-family: inherit; font-size:14.5px; font-weight:600; padding: 12px 2px; cursor:pointer; }
+  .ref-toggle:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; }
+  .ref-toggle .ref-icon{ font-family:'IBM Plex Mono', monospace; color:#9a9c92; flex-shrink:0; }
+  .ref-preview{ margin:0 0 10px; font-size:13px; color:#a9ab9f; }
+  .ref-body{ padding: 0 2px 16px; }
+  .ref-body[hidden]{ display:none; }
+  .ref-body p{ font-size:13.5px; color:#c7c9bd; margin:0 0 10px; }
+  .ref-jump{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color: var(--phosphor); background:none; border:1px solid var(--phosphor-dim); border-radius:999px; padding:6px 12px; cursor:pointer; }
+
+  .tips-grid{ display:grid; grid-template-columns: 1fr; gap: 40px; }
+  @media (min-width: 780px){ .tips-grid{ grid-template-columns: 1fr 1fr; } }
+  .tips-col h3{ font-family:'IBM Plex Mono', monospace; font-size:15px; margin:0 0 18px; }
+  .tips-col.tips h3{ color: var(--phosphor); }
+  .tips-col.errors h3{ color: var(--amber); }
+  .tip-item{ border-left: 3px solid var(--phosphor-dim); padding: 4px 0 4px 16px; margin-bottom: 20px; }
+  .error-item{ border-left: 3px solid rgba(222,162,46,0.5); padding: 4px 0 4px 16px; margin-bottom: 20px; }
+  .tip-item strong, .error-item strong{ display:block; font-size:14.5px; margin-bottom:4px; color: var(--paper); }
+  .tip-item span, .error-item span{ font-size:13.5px; color:#a9ab9f; }
+
+  .glossary{ margin-top: 44px; }
+  .glossary h3{ font-family:'IBM Plex Mono', monospace; font-size:15px; margin:0 0 18px; color:#c7c9bd; }
+  .glossary-grid{ display:grid; grid-template-columns: 1fr; gap: 16px 32px; }
+  @media (min-width: 780px){ .glossary-grid{ grid-template-columns: 1fr 1fr; } }
+  .glossary-grid dt{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:13.5px; color: var(--paper); }
+  .glossary-grid dd{ margin: 3px 0 0; font-size:13px; color:#a9ab9f; }
+
+  table.specs{ width:100%; border-collapse: collapse; font-size: 14px; }
+  table.specs td{ padding: 12px; border-bottom: 1px solid var(--grid-line); color: var(--paper); }
+  table.specs td:first-child{ color:#c7c9bd; width: 42%; }
+  table.specs tr:hover td{ background: rgba(95,214,122,0.05); }
+
+  footer{ max-width:1180px; margin:0 auto; padding: 40px 28px 60px; font-size: 12.5px; color:#767a6f; font-family:'IBM Plex Mono', monospace; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow-row"><span class="dot"></span> Agilent Technologies — Serie 54620, MegaZoom</div>
+  <h1>54621A<sup>60 MHz</sup></h1>
+  <p class="lead">Guía interactiva del panel frontal, pensada para quien usa este osciloscopio por primera vez. Toca cualquier control para entender qué hace y cómo se usa.</p>
+  <div class="spec-strip mono">
+    <div><div class="num">60 MHz</div><div class="label">ANCHO DE BANDA</div></div>
+    <div><div class="num">200 MSa/s</div><div class="label">MUESTREO</div></div>
+    <div><div class="num">2 MB</div><div class="label">MEMORIA MEGAZOOM / CANAL</div></div>
+    <div><div class="num">2</div><div class="label">CANALES</div></div>
+    <div><div class="num">I2C·SPI·CAN·USB</div><div class="label">DECODIFICACIÓN DE BUS</div></div>
+  </div>
+</header>
+
+<section class="quickstart">
+  <div class="section-head"><h2>Primeros pasos</h2><span>De encendido a una traza estable</span></div>
+  <div class="quickstart-card">
+    <ol class="qs-steps">
+      <li><p><strong>Enciende el equipo</strong> con el botón Power.</p></li>
+      <li><p><strong>Conecta la sonda al canal 1 (X)</strong> y compénsala en los pines Probe Comp si es necesario.</p></li>
+      <li><p><strong>Pulsa Auto-Scale</strong> para que el equipo ajuste escala, base de tiempo y disparo automáticamente.</p></li>
+      <li><p><strong>Afina manualmente</strong> V/div, s/div y el nivel de disparo (Trigger → Level) hasta que la traza quede estable.</p></li>
+      <li><p><strong>Usa Quick Meas o Cursors</strong> para leer los valores que necesitas.</p></li>
+      <li><p><strong>Guarda tu configuración</strong> con Save/Recall si vas a repetirla.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="panel-section">
+  <div class="panel-toolbar">
+    <p class="instruction">Control activo: <strong id="active-label">ninguno</strong> · las perillas giran si las arrastras</p>
+    <button class="zoom-launcher" id="zoom-open">Ver más grande ⤢</button>
+  </div>
+  <div class="panel-wrap">
+    <div id="panel-host">
+      <div class="chassis" id="chassis">
+        <div class="panel">
+
+          <div class="bezel-left">
+            <div class="brand">
+              <span class="model">AGILENT TECHNOLOGIES · 54621A</span>
+              <span class="sub">OSCILLOSCOPE · MEGAZOOM — 60 MHz — 200 MSa/s</span>
+            </div>
+
+            <div class="screen-row">
+              <button class="screen hotspot" id="scope-screen" data-key="screen" aria-label="Pantalla">
+                <svg viewBox="0 0 200 150">
+                  <rect x="0" y="0" width="200" height="150" fill="#dff0c0"/>
+                  <line x1="0" y1="37.5" x2="200" y2="37.5" stroke="#a9c47a" stroke-width="1"/>
+                  <line x1="0" y1="75" x2="200" y2="75" stroke="#8fae5f" stroke-width="1"/>
+                  <line x1="0" y1="112.5" x2="200" y2="112.5" stroke="#a9c47a" stroke-width="1"/>
+                  <line x1="50" y1="0" x2="50" y2="150" stroke="#a9c47a" stroke-width="1"/>
+                  <line x1="100" y1="0" x2="100" y2="150" stroke="#8fae5f" stroke-width="1"/>
+                  <line x1="150" y1="0" x2="150" y2="150" stroke="#a9c47a" stroke-width="1"/>
+                  <path d="M0,50 L0,100 L15,100 L15,50 L30,50 L30,100 L45,100 L45,50 L60,50 L60,100 L75,100 L75,50 L90,50 L90,100 L105,100 L105,50 L120,50 L120,100 L135,100 L135,50 L150,50 L150,100 L165,100 L165,50 L180,50 L180,100 L195,100 L195,50 L200,50" fill="none" stroke="#3a5a1e" stroke-width="1.8"/>
+                  <rect x="0" y="0" width="200" height="10" fill="#0a100d" opacity="0.75"/>
+                  <text x="3" y="7.5" font-size="6" fill="#dff0c0" font-family="monospace">2.00V/</text>
+                  <text x="58" y="7.5" font-size="6" fill="#dff0c0" font-family="monospace">1.00ms/</text>
+                  <text x="118" y="7.5" font-size="6" fill="#dff0c0" font-family="monospace">Auto</text>
+                  <text x="158" y="7.5" font-size="6" fill="#dff0c0" font-family="monospace">1  0.0V</text>
+                </svg>
+              </button>
+              <div class="softkeys" aria-hidden="true">
+                <div class="softkey-btn"></div><div class="softkey-btn"></div><div class="softkey-btn"></div><div class="softkey-btn"></div><div class="softkey-btn"></div>
+              </div>
+              <button class="hotspot" data-key="softkeys" style="align-self:stretch;padding:4px 2px;" aria-label="Teclas de menú"></button>
+            </div>
+
+            <div class="row-below-screen">
+              <button class="mini-btn hotspot" data-key="intensity">
+                <span class="knob-dot"><span class="knob-tick"></span></span>
+                <span class="lbl">INTENSITY</span>
+              </button>
+              <div class="floppy-power hotspot" data-key="power" tabindex="0" role="button">
+                <div class="floppy-drive"><div class="slot"></div><div class="eject"></div><div class="led"></div></div>
+                <button class="power-btn" aria-label="Power">⏻</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="bezel-right">
+            <div class="right-grid">
+
+              <div class="area-horizontal hotspot" data-key="horizontal" tabindex="0" role="button">
+                <span class="cap">HORIZONTAL</span>
+                <div class="row">
+                  <div class="knob"><span class="knob-tick"></span></div>
+                  <div class="btn-square">Main<br>Delayed</div>
+                  <div class="knob small"><span class="knob-tick"></span></div>
+                </div>
+              </div>
+
+              <div class="area-runcontrol hotspot" data-key="runcontrol" tabindex="0" role="button">
+                <span class="cap">RUN CONTROL</span>
+                <div class="row">
+                  <div class="btn-pill glow-on">Run/Stop</div>
+                  <div class="btn-pill">Single</div>
+                </div>
+              </div>
+
+              <div class="area-measure hotspot" data-key="measure" tabindex="0" role="button">
+                <span class="cap">MEASURE</span>
+                <div class="row">
+                  <div class="btn-square">Cursors</div>
+                  <div class="btn-square">Quick<br>Meas</div>
+                </div>
+              </div>
+
+              <div class="area-waveform hotspot" data-key="waveform" tabindex="0" role="button">
+                <span class="cap">WAVEFORM</span>
+                <div class="row">
+                  <div class="btn-square">Acquire</div>
+                  <div class="btn-square">Display</div>
+                </div>
+              </div>
+
+              <div class="area-file hotspot" data-key="file" tabindex="0" role="button">
+                <span class="cap">FILE</span>
+                <div class="row">
+                  <div class="btn-square">Save<br>Recall</div>
+                  <div class="btn-square">Quick<br>Print</div>
+                  <div class="btn-square">Utility</div>
+                </div>
+              </div>
+
+              <div class="area-autoscale hotspot" data-key="autoscale" tabindex="0" role="button">
+                <span class="cap">AUTO-SCALE</span>
+                <div class="row">
+                  <div class="btn-pill amber">Auto-Scale</div>
+                  <div class="knob small"><span class="knob-tick"></span></div>
+                </div>
+              </div>
+
+              <div class="area-vertical hotspot" data-key="vertical" tabindex="0" role="button" style="padding-bottom:14px;">
+                <span class="cap">VERTICAL</span>
+                <div class="vertical-sub">
+                  <div class="chan-col">
+                    <div class="knobs">
+                      <div class="knob dot-amber"><span class="knob-tick"></span></div>
+                      <div class="knob small dot-amber"><span class="knob-tick"></span></div>
+                    </div>
+                    <span class="chan-tag amber glow-on">1</span>
+                  </div>
+                  <div class="mathref-col">
+                    <div class="btn-square">Math</div>
+                  </div>
+                  <div class="chan-col">
+                    <div class="knobs">
+                      <div class="knob dot-leaf"><span class="knob-tick"></span></div>
+                      <div class="knob small dot-leaf"><span class="knob-tick"></span></div>
+                    </div>
+                    <span class="chan-tag leaf">2</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="area-trigger hotspot" data-key="trigger" tabindex="0" role="button">
+                <span class="cap">TRIGGER</span>
+                <div class="trigger-sub">
+                  <div class="btn-square glow-on">Edge</div>
+                  <div class="btn-square">Mode<br>Coupling</div>
+                  <div class="btn-square">Pulse<br>Width</div>
+                  <div class="btn-square">Pattern</div>
+                  <div class="btn-square" style="grid-column:1/3;">More</div>
+                  <div class="knob-wrap"><div class="knob small"><span class="knob-tick"></span></div><span class="jack-label mono" style="font-size:9px;">Level</span></div>
+                </div>
+              </div>
+
+              <div class="area-inputs-left hotspot" data-key="inputs" tabindex="0" role="button" style="margin-top:10px;">
+                <span class="cap">ENTRADAS BNC</span>
+                <div class="inputs-row">
+                  <div><div class="bnc amber"></div><div class="bnc-label">1 · X</div></div>
+                  <div><div class="bnc leaf"></div><div class="bnc-label">2 · Y</div></div>
+                  <div class="bnc-label" style="max-width:170px;">1 MΩ ≈ 14 pF · 300 V RMS CAT I</div>
+                </div>
+              </div>
+
+              <div class="area-inputs-right hotspot" data-key="inputs" tabindex="0" role="button" style="margin-top:10px;">
+                <span class="cap">&nbsp;</span>
+                <div class="inputs-row">
+                  <div><div class="bnc"></div><div class="bnc-label">Ext Trigger</div></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="reference-section">
+  <div class="section-head"><h2>Referencia rápida</h2><span>Toca un control para expandirlo</span></div>
+  <div class="ref-groups" id="ref-groups"></div>
+</section>
+
+<section class="tips-section">
+  <div class="section-head"><h2>Consejos y errores comunes</h2><span>Para quien empieza</span></div>
+  <p class="section-note">Esta serie destaca por su memoria profunda MegaZoom y su disparo flexible. Esto es lo que más ayuda a aprovecharla bien desde el principio.</p>
+  <div class="tips-grid">
+    <div class="tips-col tips">
+      <h3>Tips para empezar</h3>
+      <div class="tip-item"><strong>Aprovecha la memoria MegaZoom</strong><span>Con 2 MB por canal puedes capturar una señal larga y hacer zoom después sin perder detalle ni volver a medir.</span></div>
+      <div class="tip-item"><strong>Usa Trigger → More para buses serie</strong><span>Esta serie decodifica I2C, SPI, CAN y USB de forma nativa — útil si trabajas con microcontroladores.</span></div>
+      <div class="tip-item"><strong>INTENSITY no cambia la señal</strong><span>Solo ajusta el brillo de la traza — súbelo para señales muy rápidas o poco frecuentes.</span></div>
+      <div class="tip-item"><strong>El disquete integrado guarda sin computadora</strong><span>Puedes guardar configuraciones y capturas directamente, aunque es tecnología poco común hoy.</span></div>
+      <div class="tip-item"><strong>Prueba Pattern o Pulse Width</strong><span>Si Edge no logra estabilizar una señal digital compleja, estos modos de disparo suelen resolverlo.</span></div>
+      <div class="tip-item"><strong>Revisa Display → Persistence</strong><span>Útil para ver cómo varía una señal en el tiempo, en vez de solo el último barrido.</span></div>
+    </div>
+    <div class="tips-col errors">
+      <h3>Errores comunes</h3>
+      <div class="error-item"><strong>Confundir el zoom de MegaZoom con volver a medir</strong><span>En realidad estás navegando dentro de la memoria ya capturada, no adquiriendo de nuevo.</span></div>
+      <div class="error-item"><strong>Dejar Trigger en Edge para señales digitales complejas</strong><span>Cuando el patrón es complejo, Pattern o Pulse Width suelen dar una traza más estable.</span></div>
+      <div class="error-item"><strong>Olvidar compensar la sonda</strong><span>En los pines Probe Comp, antes de medir amplitudes precisas.</span></div>
+      <div class="error-item"><strong>Confundir qué canal es cuál</strong><span>Etiqueta o recuerda qué sonda va en X (canal 1) y cuál en Y (canal 2) al conectar dos señales.</span></div>
+      <div class="error-item"><strong>Ignorar el límite de 300V RMS CAT I</strong><span>Aplica a todas las entradas, incluida Ext Trigger.</span></div>
+      <div class="error-item"><strong>Dejar Persistence activada sin notarlo</strong><span>Puede hacer parecer que una señal tiene más ruido del que realmente tiene.</span></div>
+    </div>
+  </div>
+
+  <div class="glossary">
+    <h3>Glosario rápido</h3>
+    <dl class="glossary-grid">
+      <div><dt>MegaZoom</dt><dd>Tecnología de memoria profunda de Agilent: captura señales largas manteniendo alta tasa de muestreo, y permite hacer zoom después sin volver a medir.</dd></div>
+      <div><dt>Persistencia</dt><dd>Modo de visualización que superpone varios barridos, útil para ver variaciones de una señal en el tiempo.</dd></div>
+      <div><dt>Disparo por patrón (Pattern)</dt><dd>Dispara cuando una combinación lógica específica de los canales se cumple.</dd></div>
+      <div><dt>Decodificación de bus serie</dt><dd>Interpretación de protocolos digitales (I2C, SPI, CAN, USB) directamente sobre la señal capturada.</dd></div>
+      <div><dt>CAT I</dt><dd>Categoría de seguridad para circuitos que no están conectados directamente a la red eléctrica.</dd></div>
+      <div><dt>FFT</dt><dd>Transformada rápida de Fourier, para ver el contenido de frecuencias de una señal.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section class="specs-section">
+  <div class="section-head"><h2>Especificaciones técnicas</h2><span>Agilent 54621A</span></div>
+  <table class="specs">
+    <tbody>
+      <tr><td>Ancho de banda</td><td>60 MHz</td></tr>
+      <tr><td>Canales</td><td>2</td></tr>
+      <tr><td>Frecuencia de muestreo</td><td>200 MSa/s</td></tr>
+      <tr><td>Memoria MegaZoom</td><td>2 MB por canal</td></tr>
+      <tr><td>Pantalla</td><td>LCD de alta definición, fósforo verde</td></tr>
+      <tr><td>Sensibilidad vertical</td><td>1 mV/div a 5 V/div</td></tr>
+      <tr><td>Base de tiempo</td><td>2 ns/div a 5 s/div</td></tr>
+      <tr><td>Disparo</td><td>Flanco, ancho de pulso, patrón, y decodificación de bus serie (I2C, SPI, CAN, USB)</td></tr>
+      <tr><td>Impedancia de entrada</td><td>1 MΩ ≈ 14 pF · 300 V RMS CAT I</td></tr>
+      <tr><td>Almacenamiento</td><td>Disquete integrado · puertos RS-232 y paralelo</td></tr>
+      <tr><td>Ayuda en pantalla</td><td>11 idiomas</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  Guía de referencia no oficial elaborada a partir de las especificaciones públicas de Agilent Technologies (hoy Keysight) para el modelo 54621A. No sustituye al manual de usuario original del fabricante.
+</footer>
+
+<div class="zoom-modal" id="zoom-modal" hidden>
+  <div class="zoom-topbar">
+    <span class="zoom-hint mono">Desliza para recorrer el panel ampliado — los controles siguen siendo interactivos</span>
+    <button class="zoom-close" id="zoom-close">✕ Cerrar</button>
+  </div>
+  <div class="zoom-scroll" id="zoom-scroll"></div>
+</div>
+
+<div class="callout" id="callout" role="status">
+  <button class="callout-close" id="callout-close" aria-label="Cerrar">✕</button>
+  <div class="callout-group" id="callout-group"></div>
+  <h4 id="callout-title"></h4>
+  <p id="callout-text"></p>
+</div>
+
+<script>
+const DATA = {
+  screen: { group:"PANTALLA", title:"Pantalla de alta definición",
+    short:"Fósforo verde, con tecnología MegaZoom de memoria profunda.",
+    body:["Pantalla LCD de alta definición con fósforo verde característico de esta serie.",
+      "La tecnología MegaZoom mapea hasta 2 MB de memoria por canal a 32 niveles de intensidad, permitiendo capturar señales largas sin perder detalle."] },
+  softkeys: { group:"INTERFAZ", title:"Teclas de menú (softkeys)",
+    short:"Su función cambia según el menú activo en pantalla.",
+    body:["Las cinco teclas junto a la pantalla no tienen una función fija: cada una corresponde a la etiqueta que aparece justo a su lado en ese momento.",
+      "Por ejemplo, al configurar un canal muestran Coupling, BW Limit, Vernier, Invert y Probe."] },
+  intensity: { group:"PANTALLA", title:"Perilla INTENSITY",
+    short:"Ajusta el brillo con el que se dibuja la traza, no la señal en sí.",
+    body:["Ajusta el brillo con el que se dibuja la traza en pantalla — útil para resaltar señales rápidas o poco frecuentes sin saturar el resto de la imagen.",
+      "No cambia la señal medida, solo su representación visual."] },
+  power: { group:"SISTEMA", title:"Power y unidad de disquete",
+    short:"Enciende el equipo; la ranura es una disquetera de 3½\", no un casete.",
+    body:["El botón Power enciende y apaga el osciloscopio.",
+      "La ranura junto a él es una unidad de disquete de 3½\" integrada (no un casete de audio, aunque se le parezca): permite guardar configuraciones y capturas de pantalla directamente en un disco, sin computadora — una característica típica de esta generación de equipos, junto con sus puertos RS-232 y paralelo."] },
+  horizontal: { group:"BASE DE TIEMPO", title:"Horizontal",
+    short:"Ajusta la base de tiempo (s/div) y la posición horizontal de la traza.",
+    body:["Perilla grande: desplaza la posición horizontal de la forma de onda.",
+      "Perilla pequeña: ajusta la base de tiempo (s/div), de 2 ns/div a 5 s/div.",
+      "Main/Delayed alterna entre el barrido principal y un barrido retardado (zoom en el tiempo), para ampliar una porción concreta de la señal."],
+    steps:["Gira la perilla pequeña para acercar o alejar la señal en el tiempo.","Usa la perilla grande para centrar el evento que te interesa.","Pulsa Main/Delayed si necesitas ampliar un tramo concreto del barrido."] },
+  runcontrol: { group:"ADQUISICIÓN", title:"Run Control",
+    short:"Run/Stop congela la adquisición; Single captura un solo evento.",
+    body:["Run/Stop inicia o congela la adquisición continua de la señal.",
+      "Single realiza una única adquisición cuando se cumple la condición de disparo — ideal para eventos que no se repiten."] },
+  measure: { group:"MEDICIÓN", title:"Measure",
+    short:"Cursors mide manualmente; Quick Meas calcula mediciones automáticas.",
+    body:["Cursors activa dos líneas de referencia que puedes desplazar manualmente para leer valores exactos.",
+      "Quick Meas abre el menú de mediciones automáticas rápidas: frecuencia, amplitud, tiempo de subida y otras."] },
+  waveform: { group:"ADQUISICIÓN", title:"Waveform",
+    short:"Define cómo se adquiere (Acquire) y se dibuja (Display) la señal.",
+    body:["Acquire define el modo de adquisición: normal, promediado (para reducir ruido) o detección de picos.",
+      "Display ajusta cómo se dibuja la traza, incluida la persistencia, útil para ver variaciones de una señal en el tiempo."] },
+  file: { group:"ALMACENAMIENTO", title:"File",
+    short:"Save/Recall guarda configuraciones; Quick Print imprime la pantalla; Utility ajusta opciones generales.",
+    body:["Save/Recall guarda y recupera configuraciones y formas de onda, incluso en el disquete integrado.",
+      "Quick Print envía la pantalla actual a una impresora o la exporta como archivo, según cómo esté configurado el equipo.",
+      "Utility ajusta opciones generales del equipo: idioma, calibración, entradas/salidas remotas."] },
+  autoscale: { group:"CONFIGURACIÓN RÁPIDA", title:"Auto-Scale",
+    short:"Ajusta automáticamente escala, tiempo y disparo para mostrar la señal.",
+    body:["Auto-Scale analiza la señal conectada y ajusta automáticamente la escala vertical, la base de tiempo y el nivel de disparo para mostrarla de forma legible.",
+      "La perilla giratoria junto al botón navega y ajusta valores dentro de los menús en pantalla."] },
+  vertical: { group:"AMPLIFICADORES VERTICALES", title:"Vertical — Canal 1 y Canal 2",
+    short:"Escala y posición vertical de cada canal, más Math.",
+    body:["Cada canal tiene su propio par de perillas, identificadas por color (ámbar canal 1, verde canal 2).",
+      "Perilla superior: escala vertical (V/div), de 1 mV/div a 5 V/div. Perilla inferior: posición vertical de la traza.",
+      "Los botones ovalados «1» y «2» activan o desactivan cada canal y abren su menú de opciones.",
+      "Math combina matemáticamente ambas señales (suma, resta, FFT)."] },
+  trigger: { group:"DISPARO", title:"Trigger",
+    short:"Edge, Pulse Width, Pattern y More definen cómo se estabiliza la traza.",
+    body:["Edge dispara por flanco — el modo más común, adecuado para la mayoría de las señales.",
+      "Pulse Width dispara según el ancho de un pulso, útil para aislar pulsos anómalos.",
+      "Pattern dispara según una combinación lógica de los canales, útil en señales digitales.",
+      "More da acceso a tipos de disparo avanzados, incluida la decodificación de buses serie (I2C, SPI, CAN, USB).",
+      "Mode/Coupling ajusta el modo y acoplamiento del disparo; la perilla Level fija manualmente el nivel de disparo en voltios."] },
+  inputs: { group:"ENTRADAS", title:"Conectores BNC de entrada",
+    short:"Canal 1 (X), canal 2 (Y) y disparo externo, 300 V RMS CAT I.",
+    body:["Conectores BNC de los canales 1 (X) y 2 (Y), y de disparo externo (Ext Trigger).",
+      "Todas las entradas comparten la misma impedancia (1 MΩ ≈ 14 pF) y el mismo límite de tensión: 300 V RMS, categoría CAT I.",
+      "Junto a Ext Trigger hay dos pines de compensación de sonda (Probe Comp) para calibrar tus puntas antes de medir."] }
+};
+
+const GROUP_ORDER = ["screen","softkeys","intensity","power","horizontal","runcontrol","measure","waveform","file","autoscale","vertical","trigger","inputs"];
+
+const activeLabel = document.getElementById('active-label');
+const chassis = document.getElementById('chassis');
+const panelHost = document.getElementById('panel-host');
+
+function setActiveHotspot(key){
+  document.querySelectorAll('.hotspot').forEach(h => h.classList.toggle('active', h.dataset.key === key));
+}
+
+const callout = document.getElementById('callout');
+const calloutGroup = document.getElementById('callout-group');
+const calloutTitle = document.getElementById('callout-title');
+const calloutText = document.getElementById('callout-text');
+
+function showCallout(targetEl, item){
+  calloutGroup.textContent = item.group;
+  calloutTitle.textContent = item.title;
+  calloutText.textContent = item.short;
+  callout.classList.add('show');
+
+  const rect = targetEl.getBoundingClientRect();
+  const cw = callout.offsetWidth, ch = callout.offsetHeight;
+  const margin = 12;
+  let left, top;
+  const spaceRight = window.innerWidth - rect.right;
+  const spaceLeft = rect.left;
+
+  if(spaceRight > cw + margin + 8){ left = rect.right + margin; top = rect.top; }
+  else if(spaceLeft > cw + margin + 8){ left = rect.left - cw - margin; top = rect.top; }
+  else {
+    left = rect.left;
+    if(rect.bottom + ch + margin < window.innerHeight){ top = rect.bottom + margin; }
+    else { top = rect.top - ch - margin; }
+  }
+  left = Math.min(Math.max(8, left), window.innerWidth - cw - 8);
+  top = Math.min(Math.max(8, top), window.innerHeight - ch - 8);
+  callout.style.left = left + 'px';
+  callout.style.top = top + 'px';
+}
+function hideCallout(){ callout.classList.remove('show'); }
+
+function jumpToReference(key){
+  const itemEl = document.getElementById('ref-' + key);
+  if(!itemEl) return;
+  const body = itemEl.querySelector('.ref-body');
+  const toggle = itemEl.querySelector('.ref-toggle');
+  if(body && body.hidden){
+    body.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.querySelector('.ref-icon').textContent = '–';
+  }
+  itemEl.scrollIntoView({ behavior:'smooth', block:'center' });
+  itemEl.classList.add('flash-ref');
+  setTimeout(() => itemEl.classList.remove('flash-ref'), 1200);
+}
+
+document.getElementById('callout-close').addEventListener('click', hideCallout);
+document.addEventListener('click', (e) => {
+  if(callout.classList.contains('show') && !callout.contains(e.target) && !e.target.closest('.hotspot')){
+    hideCallout();
+  }
+});
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') hideCallout(); });
+
+function activate(key, opts = {}){
+  const item = DATA[key];
+  if(!item) return;
+  activeLabel.textContent = item.title;
+  setActiveHotspot(key);
+  const isZoomed = chassis.parentElement === zoomScroll;
+  if(isZoomed && opts.sourceEl){
+    showCallout(opts.sourceEl, item);
+  } else {
+    hideCallout();
+    jumpToReference(key);
+  }
+}
+
+document.querySelectorAll('.hotspot').forEach(h => {
+  h.addEventListener('click', () => activate(h.dataset.key, { sourceEl: h }));
+  h.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); activate(h.dataset.key, { sourceEl: h }); }
+  });
+});
+
+const zoomModal = document.getElementById('zoom-modal');
+const zoomScroll = document.getElementById('zoom-scroll');
+let savedScrollY = 0;
+
+document.getElementById('zoom-open').addEventListener('click', () => {
+  savedScrollY = window.scrollY || window.pageYOffset || 0;
+  zoomScroll.appendChild(chassis);
+  zoomModal.hidden = false;
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${savedScrollY}px`;
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+});
+function closeZoom(){
+  panelHost.appendChild(chassis);
+  zoomModal.hidden = true;
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.width = '';
+  window.scrollTo(0, savedScrollY);
+}
+document.getElementById('zoom-close').addEventListener('click', closeZoom);
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && !zoomModal.hidden) closeZoom(); });
+
+function makeKnobDraggable(knob){
+  const tick = knob.querySelector('.knob-tick');
+  if(!tick) return;
+  let dragging = false, startAngle = 0, startRotation = 0, moved = false, currentRotation = 0;
+
+  function angleFromCenter(clientX, clientY){
+    const rect = knob.getBoundingClientRect();
+    const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
+    return Math.atan2(clientY - cy, clientX - cx) * 180/Math.PI;
+  }
+  function point(e){
+    if(e.touches && e.touches.length){ return { x: e.touches[0].clientX, y: e.touches[0].clientY }; }
+    return { x: e.clientX, y: e.clientY };
+  }
+  function start(e){
+    dragging = true; moved = false;
+    const p = point(e);
+    startAngle = angleFromCenter(p.x, p.y);
+    startRotation = currentRotation;
+  }
+  function move(e){
+    if(!dragging) return;
+    const p = point(e);
+    const a = angleFromCenter(p.x, p.y);
+    const delta = a - startAngle;
+    if(Math.abs(delta) > 3) moved = true;
+    if(moved && e.cancelable) e.preventDefault();
+    currentRotation = startRotation + delta;
+    tick.style.transform = `rotate(${currentRotation}deg)`;
+  }
+  function end(){
+    if(!dragging) return;
+    dragging = false;
+    if(moved){
+      const blockClick = (ev) => { ev.stopPropagation(); knob.removeEventListener('click', blockClick, true); };
+      knob.addEventListener('click', blockClick, true);
+    }
+  }
+  knob.addEventListener('mousedown', start);
+  window.addEventListener('mousemove', move);
+  window.addEventListener('mouseup', end);
+  knob.addEventListener('touchstart', start, { passive:true });
+  knob.addEventListener('touchmove', move, { passive:false });
+  knob.addEventListener('touchend', end);
+  knob.addEventListener('touchcancel', end);
+}
+document.querySelectorAll('.knob, .knob-dot').forEach(makeKnobDraggable);
+
+const refGroupsEl = document.getElementById('ref-groups');
+const groupsMap = {};
+GROUP_ORDER.forEach(key => {
+  const g = DATA[key].group;
+  (groupsMap[g] = groupsMap[g] || []).push(key);
+});
+
+Object.keys(groupsMap).forEach(groupName => {
+  const groupEl = document.createElement('div');
+  groupEl.className = 'ref-group';
+  const h4 = document.createElement('h4');
+  h4.textContent = groupName;
+  groupEl.appendChild(h4);
+
+  groupsMap[groupName].forEach(key => {
+    const item = DATA[key];
+    const itemEl = document.createElement('div');
+    itemEl.className = 'ref-item';
+    itemEl.id = 'ref-' + key;
+
+    const toggle = document.createElement('button');
+    toggle.className = 'ref-toggle';
+    toggle.dataset.key = key;
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.innerHTML = `<span>${item.title}</span><span class="ref-icon mono">+</span>`;
+
+    const preview = document.createElement('p');
+    preview.className = 'ref-preview';
+    preview.textContent = item.short;
+
+    const body = document.createElement('div');
+    body.className = 'ref-body';
+    body.hidden = true;
+    let bodyHtml = '';
+    item.body.forEach(p => { bodyHtml += `<p>${p}</p>`; });
+    if(item.steps){
+      bodyHtml += '<p><strong>Pasos:</strong></p>';
+      item.steps.forEach((s,i) => { bodyHtml += `<p>${i+1}. ${s}</p>`; });
+    }
+    bodyHtml += '<button class="ref-jump mono" data-key="' + key + '">Ver este control en el panel ↑</button>';
+    body.innerHTML = bodyHtml;
+
+    toggle.addEventListener('click', () => {
+      const isOpen = !body.hidden;
+      body.hidden = isOpen;
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+      toggle.querySelector('.ref-icon').textContent = isOpen ? '+' : '–';
+      setActiveHotspot(key);
+      activeLabel.textContent = item.title;
+    });
+
+    itemEl.appendChild(toggle);
+    itemEl.appendChild(preview);
+    itemEl.appendChild(body);
+    groupEl.appendChild(itemEl);
+  });
+
+  refGroupsEl.appendChild(groupEl);
+});
+
+refGroupsEl.addEventListener('click', (e) => {
+  const jumpBtn = e.target.closest('.ref-jump');
+  if(!jumpBtn) return;
+  const key = jumpBtn.dataset.key;
+  activate(key, {});
+  const hotspotEl = document.querySelector(`.hotspot[data-key="${key}"]`);
+  if(hotspotEl){
+    hotspotEl.scrollIntoView({ behavior:'smooth', block:'center' });
+    hotspotEl.classList.add('flash');
+    setTimeout(() => hotspotEl.classList.remove('flash'), 1000);
+  }
+});
+</script>
+
+</body>
+</html>
